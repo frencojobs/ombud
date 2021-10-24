@@ -23,8 +23,8 @@ export function setup(controller: Instantiable): FastifyPluginAsync {
           request.url
         )
 
-        for (const handler of handlers) {
-          await instance[handler]({...request, params}, reply)
+        if (handlers[0]) {
+          await instance[handlers[0]]({...request, params}, reply)
         }
       }
     })
