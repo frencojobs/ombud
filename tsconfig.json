@@ -5,6 +5,8 @@
     "module": "ESNext",
     "target": "ESNext",
     "types": ["node", "jest"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
 
     // Optional
     "lib": ["DOM", "ESNext"],

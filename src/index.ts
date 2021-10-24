@@ -1,17 +1,35 @@
-type Livings = unknown
+import {FastifyPluginAsync} from 'fastify'
+import proxy from 'fastify-http-proxy'
+import 'reflect-metadata'
+import {Methods} from 'trouter'
+import {Router} from './decorators/handlers.decorator'
+import {Keys} from './decorators/keys'
 
-/**
- * this doesn't actually work but it at least reduces the complexity by half
- * - Maybe Thanos
- */
-export default function thanosSort(universe: Livings[]): Livings[] {
-  if (Math.random() * (14e6 + 605) < 1) {
-    // fourteen million, six hundred and five
-    // - Doctor Strange
-    return universe
+// eslint-disable-next-line
+type Instantiable = {new (...args: unknown[]): any}
+
+export function setup(controller: Instantiable): FastifyPluginAsync {
+  const instance = new controller()
+
+  const options = Reflect.getMetadata(Keys.CONTROLLER_OPTIONS, controller)
+  const router: Router = Reflect.getMetadata(Keys.ROUTER, controller)
+
+  return async (fastify) => {
+    fastify.register(proxy, {
+      ...options,
+      preHandler: async (request, reply) => {
+        const {params, handlers} = router.find(
+          request.method as Methods,
+          request.url
+        )
+
+        for (const handler of handlers) {
+          await instance[handler]({...request, params}, reply)
+        }
+      }
+    })
   }
-
-  return universe
-    .sort(() => 0.5 - Math.random())
-    .splice(0, Math.floor(universe.length / 2))
 }
+
+export {Controller} from './decorators/controller.decorator'
+export * from './decorators/handlers.decorator'

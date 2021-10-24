@@ -1,5 +1,6 @@
 {
-  "name": "lib",
+  "name": "ombud",
+  "version": "0.0.1",
   "type": "module",
   "exports": "./dist/index.js",
   "typings": "./dist/index.d.ts",
@@ -44,6 +45,12 @@
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
     }
+  },
+  "dependencies": {
+    "fastify": "^3.22.1",
+    "fastify-http-proxy": "^6.2.1",
+    "reflect-metadata": "^0.1.13",
+    "trouter": "^3.2.0"
   },
   "devDependencies": {
     "@types/jest": "^27.0.1",
