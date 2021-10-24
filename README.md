@@ -1,3 +1,5 @@
+# Ombud
+
 Ombud (Swedish word for proxy, pronounced `/ˈɒmbəd/`) is a tiny utility library for making proxy servers with [fastify-http-proxy](https://github.com/fastify/fastify-http-proxy). The library acts as an abstraction layer to manage routes more efficiently using TypeScript's experimental decorators.
 
 ## Overview
@@ -5,6 +7,8 @@ Ombud (Swedish word for proxy, pronounced `/ˈɒmbəd/`) is a tiny utility libra
 A simple proxy server with route based authorization will look like this.
 
 ```ts
+import {Controller, Get, All} from 'ombud'
+
 @Controller('https://example.com')
 class Proxy {
   @Get('/public')
