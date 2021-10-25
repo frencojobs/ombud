@@ -5,13 +5,13 @@ import {Router} from '../src/decorators/handlers.decorator'
 import {Keys} from '../src/decorators/keys'
 
 test('@Controller', () => {
-  @Controller('https://example.com')
+  @Controller('http://localhost:8080')
   class Proxy {}
 
   // Replicated `setup` function for tests
   const setup: typeof ombudSetup = (controller) => {
     const options = Reflect.getMetadata(Keys.CONTROLLER_OPTIONS, controller)
-    expect(options).toMatchObject({upstream: 'https://example.com'})
+    expect(options).toMatchObject({upstream: 'http://localhost:8080'})
 
     return async () => {}
   }
@@ -20,7 +20,7 @@ test('@Controller', () => {
 })
 
 test('@METHOD', () => {
-  @Controller('https://example.com')
+  @Controller('http://localhost:8080')
   class Proxy {
     @Get('/public')
     async pub() {}
