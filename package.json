@@ -9,8 +9,15 @@
   "repository": "frencojobs/ombud",
   "license": "MIT",
   "author": "Frenco <hey@frenco.dev>",
-  "type": "module",
-  "exports": "./dist/index.js",
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "typings": "./dist/index.d.ts",
   "files": [
     "dist"
