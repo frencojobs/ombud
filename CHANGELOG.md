@@ -1,3 +1,7 @@
+## 1.2.0
+
+- Pass fastify instance to controllers
+
 ## 1.1.0
 
 - Add `cjs` builds together with `esm`
