@@ -43,6 +43,10 @@ import {Controller, Get, All} from 'ombud'
 
 @Controller('https://example.com', {proxyPaylods: false}) // all the options for fastify-http-proxy are available via second param
 export class Proxy {
+  // if you want to consume `fastify` instance from controller
+  // set a constructor like this
+  constructor(private readonly fastify: FastifyInstance) {}
+
   @Get('/public')
   async pub() {}
 
