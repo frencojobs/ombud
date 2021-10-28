@@ -6,15 +6,15 @@ import {Router} from './decorators/handlers.decorator'
 import {Keys} from './decorators/keys'
 
 // eslint-disable-next-line
-type Instantiable = {new (...args: unknown[]): any}
+type Instantiable = {new (...args: any[]): any}
 
 export function setup(controller: Instantiable): FastifyPluginAsync {
-  const instance = new controller()
-
   const options = Reflect.getMetadata(Keys.CONTROLLER_OPTIONS, controller)
   const router: Router = Reflect.getMetadata(Keys.ROUTER, controller)
 
   return async (fastify) => {
+    const instance = new controller(fastify)
+
     fastify.register(proxy, {
       ...options,
       preHandler: async (request, reply) => {
