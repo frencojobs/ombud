@@ -88,3 +88,43 @@ test('simple authentication test', async () => {
   expect(priv.statusCode).toEqual(401)
   expect(priv.json()).toEqual({success: false})
 })
+
+test('query parameters are properly handled', async () => {
+  @Controller('http://localhost:8080')
+  class Proxy {
+    @Get('/')
+    async main(request: FastifyRequest, reply: FastifyReply) {
+      const {protocol, hostname, url, params, query} = request
+      return reply.code(200).send({protocol, hostname, url, params, query})
+    }
+  }
+
+  const server = fastify()
+  server.register(setup(Proxy))
+
+  // sample fastify server to compare to
+  // server.get('/', async (request, reply) => {
+  //   const {protocol, hostname, params, query, url} = request
+  //   return reply.code(200).send({protocol, hostname, params, query, url})
+  // })
+
+  const empty = await server.inject({method: 'GET', path: '/'})
+  expect(empty.statusCode).toEqual(200)
+  expect(empty.json()).toEqual({
+    protocol: 'http',
+    hostname: 'localhost:80',
+    url: '/',
+    params: {},
+    query: {}
+  })
+
+  const one = await server.inject({method: 'GET', path: '/?hello=world'})
+  expect(one.statusCode).toEqual(200)
+  expect(one.json()).toEqual({
+    protocol: 'http',
+    hostname: 'localhost:80',
+    url: '/?hello=world',
+    params: {},
+    query: {hello: 'world'}
+  })
+})

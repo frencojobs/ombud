@@ -1,3 +1,7 @@
+## 1.3.0
+
+- Handle query parameters correctly
+
 ## 1.2.0
 
 - Pass fastify instance to controllers
