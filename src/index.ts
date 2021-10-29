@@ -2,6 +2,7 @@ import {FastifyPluginAsync} from 'fastify'
 import proxy from 'fastify-http-proxy'
 import 'reflect-metadata'
 import {Methods} from 'trouter'
+import {URL} from 'url'
 import {Router} from './decorators/handlers.decorator'
 import {Keys} from './decorators/keys'
 
@@ -18,9 +19,11 @@ export function setup(controller: Instantiable): FastifyPluginAsync {
     fastify.register(proxy, {
       ...options,
       preHandler: async (request, reply) => {
+        const url = new URL(request.url, options.upstream)
+
         const {params, handlers} = router.find(
           request.method as Methods,
-          request.url
+          url.pathname
         )
 
         if (handlers[0]) {
