@@ -1,24 +1,26 @@
 import Trouter, {Methods} from 'trouter'
-import {Keys} from './keys'
+import type {Router} from '../types'
 
-export type Router = Trouter<string | symbol>
+export const ROUTER_METADATA: unique symbol = Symbol()
+export const getRouterMetadata = <T>(target: T) =>
+  Reflect.getMetadata(ROUTER_METADATA, target) as Router
 
 const methodDecoratorFactory = (method: Methods | 'ALL') => {
   return (path: string): MethodDecorator => {
     return (target, propertyKey) => {
-      const controllerClass = target.constructor
+      const controller = target.constructor
 
-      const router: Router = Reflect.hasMetadata(Keys.ROUTER, controllerClass)
-        ? Reflect.getMetadata(Keys.ROUTER, controllerClass)
-        : new Trouter()
+      const router = Reflect.hasMetadata(ROUTER_METADATA, controller)
+        ? getRouterMetadata(controller)
+        : (new Trouter() as Router)
 
       if (method === 'ALL') {
-        router.all(path, propertyKey)
+        router.all(path, propertyKey as string)
       } else {
-        router.add(method, path, propertyKey)
+        router.add(method, path, propertyKey as string)
       }
 
-      Reflect.defineMetadata(Keys.ROUTER, router, controllerClass)
+      Reflect.defineMetadata(ROUTER_METADATA, router, controller)
     }
   }
 }
