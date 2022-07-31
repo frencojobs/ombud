@@ -31,7 +31,7 @@ jobs:
         uses: lewagon/wait-on-check-action@v1.1.2
         with:
           ref: ${{ github.ref }}
-          check-name: Test
+          check-regexp: Test.*
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Release Pull Request or Publish
