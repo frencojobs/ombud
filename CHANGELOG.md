@@ -1,5 +1,11 @@
 # ombud
 
+## 1.4.0
+
+### Minor Changes
+
+- 316623f: Refactor entire development setup to keep things up to date. We now use changeset to manage CHANGELOG and publish.
+
 ## 1.3.0
 
 - Handle query parameters correctly
