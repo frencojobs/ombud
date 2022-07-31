@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
+import {expect, test} from 'vitest'
 
 import fastify, {FastifyInstance, FastifyReply, FastifyRequest} from 'fastify'
 import {Controller, Get, setup} from '../src'
@@ -13,7 +13,7 @@ test('`params` are passed to fastify', async () => {
   }
 
   const server = fastify()
-  server.register(setup(Proxy))
+  await server.register(setup(Proxy))
   const response = await server.inject({method: 'GET', path: '/params/1'})
 
   expect(response.statusCode).toEqual(200)
@@ -30,11 +30,11 @@ test('properties like `headers` are not disrupted', async () => {
   }
 
   const server = fastify()
-  server.register(setup(Proxy))
+  await server.register(setup(Proxy))
   const response = await server.inject({
     method: 'GET',
     path: '/headers',
-    headers: {'X-API-KEY': 'CAT'}
+    headers: {'X-API-KEY': 'CAT'},
   })
 
   expect(response.statusCode).toEqual(200)
@@ -50,13 +50,13 @@ test('fastify instance is passed', async () => {
 
     @Get('/decorators')
     async public(_: FastifyRequest, reply: FastifyReply) {
-      return reply.code(200).send(this.fastify.foo)
+      return reply.code(200).send(this.fastify['foo'])
     }
   }
 
   const server = fastify()
   server.decorate('foo', 'bar')
-  server.register(setup(Proxy))
+  await server.register(setup(Proxy))
   const response = await server.inject({method: 'GET', path: '/decorators'})
 
   expect(response.statusCode).toEqual(200)
@@ -78,7 +78,7 @@ test('simple authentication test', async () => {
   }
 
   const server = fastify()
-  server.register(setup(Proxy))
+  await server.register(setup(Proxy))
 
   const pub = await server.inject({method: 'GET', path: '/public'})
   expect(pub.statusCode).toEqual(200)
@@ -100,7 +100,7 @@ test('query parameters are properly handled', async () => {
   }
 
   const server = fastify()
-  server.register(setup(Proxy))
+  await server.register(setup(Proxy))
 
   // sample fastify server to compare to
   // server.get('/', async (request, reply) => {
@@ -115,7 +115,7 @@ test('query parameters are properly handled', async () => {
     hostname: 'localhost:80',
     url: '/',
     params: {},
-    query: {}
+    query: {},
   })
 
   const one = await server.inject({method: 'GET', path: '/?hello=world'})
@@ -125,6 +125,6 @@ test('query parameters are properly handled', async () => {
     hostname: 'localhost:80',
     url: '/?hello=world',
     params: {},
-    query: {hello: 'world'}
+    query: {hello: 'world'},
   })
 })

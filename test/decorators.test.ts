@@ -1,8 +1,12 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-
-import {All, Controller, Get, setup as ombudSetup} from '../src'
-import {Router} from '../src/decorators/handlers.decorator'
-import {Keys} from '../src/decorators/keys'
+import {expect, test} from 'vitest'
+import {
+  All,
+  Controller,
+  Get,
+  getControllerMetadata,
+  setup as ombudSetup,
+} from '../src'
+import {getRouterMetadata} from '../src/decorators/handlers.decorator'
 
 test('@Controller', () => {
   @Controller('http://localhost:8080')
@@ -10,7 +14,7 @@ test('@Controller', () => {
 
   // Replicated `setup` function for tests
   const setup: typeof ombudSetup = (controller) => {
-    const options = Reflect.getMetadata(Keys.CONTROLLER_OPTIONS, controller)
+    const options = getControllerMetadata(controller)
     expect(options).toMatchObject({upstream: 'http://localhost:8080'})
 
     return async () => {}
@@ -32,27 +36,27 @@ test('@METHOD', () => {
 
   // Replicated `setup` function for tests
   const setup: typeof ombudSetup = (controller) => {
-    const router: Router = Reflect.getMetadata(Keys.ROUTER, controller)
+    const router = getRouterMetadata(controller)
 
     // routing
     expect(router.find('GET', '/public')).toEqual({
       params: {},
-      handlers: ['pub']
+      handlers: ['pub'],
     })
 
     expect(router.find('GET', '/private')).toEqual({
       params: {},
-      handlers: ['auth']
+      handlers: ['auth'],
     })
 
     expect(router.find('GET', '/user/1')).toEqual({
       params: {id: '1'},
-      handlers: ['auth']
+      handlers: ['auth'],
     })
 
     expect(router.find('POST', '/user/1')).toEqual({
       params: {id: '1'},
-      handlers: ['auth']
+      handlers: ['auth'],
     })
 
     return async () => {}
