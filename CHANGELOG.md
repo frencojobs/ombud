@@ -1,5 +1,11 @@
 # ombud
 
+## 1.4.1
+
+### Patch Changes
+
+- 2a30249: Add missing build step to release workflow.
+
 ## 1.4.0
 
 ### Minor Changes
