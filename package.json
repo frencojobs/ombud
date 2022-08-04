@@ -1,6 +1,6 @@
 {
   "name": "ombud",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A tiny decorator based abstraction layer for making HTTP proxy servers with fastify-http-proxy",
   "keywords": [
     "fastify",
